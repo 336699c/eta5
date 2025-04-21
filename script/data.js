@@ -3,52 +3,52 @@ const _MTR_DATA = {
         "AEL": {
             "tc": "機場快綫",
             "en": "Airport Express",
-            "color": "#009B3A"
+            "color": "#1c7670"
         },
         "TCL": {
             "tc": "東涌綫",
             "en": "Tung Chung Line",
-            "color": "#F68B1E"
+            "color": "#fe7f1d"
         },
         "TML": {
             "tc": "屯馬綫",
             "en": "Tuen Ma Line",
-            "color": "#A14635"
+            "color": "#9a3b26"
         },
         "TKL": {
             "tc": "將軍澳綫",
             "en": "Tseung Kwan O Line",
-            "color": "#8E008E"
+            "color": "#6b208b"
         },
         "EAL": {
             "tc": "東鐵綫",
             "en": "East Rail Line",
-            "color": "#4DA43A"
+            "color": "#53b7e8"
         },
         "SIL": {
             "tc": "南港島綫",
             "en": "South Island Line",
-            "color": "#7AC143"
+            "color": "#b5bd00"
         },
         "TWL": {
             "tc": "荃灣綫",
             "en": "Tsuen Wan Line",
-            "color": "#E31B23"
+            "color": "#ff0000"
         },
         "ISL": {
             "tc": "港島綫",
             "en": "Island Line",
-            "color": "#0066B3"
+            "color": "#0860a8"
         },
         "KTL": {
             "tc": "觀塘綫",
             "en": "Kwun Tong Line",
-            "color": "#009944"
+            "color": "#1a9431"
         },
         "DRL": {
             "tc": "迪士尼綫",
             "en": "Disneyland Resort Line",
-            "color": "#F49AC1"
+            "color": "#f550a6"
         }
     },
     "station": {
@@ -56,7 +56,7 @@ const _MTR_DATA = {
     "KOW": {"tc": "九龍", "en": "Kowloon"},
     "TSY": {"tc": "青衣", "en": "Tsing Yi"},
     "AIR": {"tc": "機場", "en": "Airport"},
-    "AWE": {"tc": "亞洲國際博覽館", "en": "AsiaWorld Expo"},
+    "AWE": {"tc": "博覽館", "en": "AsiaWorld Expo"},
     "OLY": {"tc": "奧運", "en": "Olympic"},
     "NAC": {"tc": "南昌", "en": "Nam Cheong", "inter": ["TCL", "TML"]},
     "LAK": {"tc": "荔景", "en": "Lai King", "inter": ["TCL", "TWL"]},
@@ -150,5 +150,71 @@ const _MTR_DATA = {
     "KWT": {"tc": "觀塘", "en": "Kwun Tong"},
     "LAT": {"tc": "藍田", "en": "Lam Tin"},
     "DIS": {"tc": "迪士尼", "en": "Disneyland Resort"}
-}
+},
+
+    "route_stn": {
+      "ISL": ["CHW","HFC","SKW","SWH","TAK","QUB","NOP","FOH","TIH","CAB","WAN","ADM","CEN","SHW","SYP","HKU","KET"],
+      "TWL": ["TSW", "TWH", "KWH", "KWF", "LAK", "MEF", "LCK", "CSW", "SSP", "PRE", "MOK", "YMT", "JOR", "TST", "ADM", "CEN"],
+      "KTL": ["TIK","YAT","LAT","KWT","NTK","KOB","CHH","DIH","WTS","LOF","KOT","SKM","PRE","MOK","YMT","HOM","WHA"],
+      "TKL": ["POA","HAH","LHP","TKO","TIK","YAT","QUB","NOP"],
+      "TCL": ["TUC","SUN","LAK","NAC","OLY","KOW","HOK"],
+      "DRL": ["SUN", "DIS"],
+      "AEL": ["AWE", "AIR", "TSY", "KOW", "HOK"],
+      "EAL": ["LOW", "LMC", "SHS", "FAN", "TWO", "TAP", "UNI", "RAC", "FOT", "SHT", "TAW", "KOT", "MKK", "HUH", "EXC", "ADM"],
+      "TML": ["TUM", "SIH", "TIS", "YUL", "LOP", "KSR", "TWW", "MEF", "NAC", "AUS", "ETS", "HUH", "HOM", "TKW", "SUW", "KAT", "DIH", "HIK", "TAW", "CKT", "STW", "CIO", "SHM", "TSH", "HEO", "MOS", "WKS"],
+      "SIL": ["SOH", "LET", "WCH", "OCP", "ADM"]
+    },
+
+    "exp_from":{
+        "CEN":{
+            "ISL+KET":[[["4-2"],"TWL","TSW"]],
+            "TWL+TSW":[[["1-1"],"ISL","KET"]]
+        },
+        "NOP":{
+            "ISL+KET":[[["1-3","6-4","8-4"],"TKL","POA"]],
+            "TKL+POA":[[["1-4","5-4","7-1"],"ISL","KET"]],
+        },
+        "QUB":{
+            "ISL+CHW":[[["6-4"],"TKL","POA"]],
+            "TKL+POA":[[["4-5"],"ISL","CHW"]],
+        },
+        
+        "ADM":{
+            "ISL+KET":[[["5-1"],"SIL","SOH"], [["3-1","5-1"],"EAL","LOW"]],
+            "SIL+SOH":[[["1-4"],"ISL","KET"], [["1-4"],"ISL","CHW"],[["1-4"],"TWL","TSW"], [["1-4"],"EAL","LOW"]],
+            "TWL+TSW":[["N/A","ISL","CHW"],[["4-4"],"SIL","SOH"]],
+            "ISL+CHW":[["N/A","TWL","TSW"],[["4-5"],"SIL","SOH"],[["4-5","6-5"],"EAL","LOW"]]
+        },
+        
+        "YAT":{
+            "TKL+NOP":[["N/A","KTL","WHA"]],
+            "KTL+WHA":[["N/A","TKL","NOP"]],
+        },
+        "TIK":{
+            "TKL+POA":[["N/A","KTL","WHA"]],
+            "KTL+WHA":[["N/A","TKL","POA"]],
+        },
+        "HUH":{
+
+        },
+        "YMT":{
+            "TWL+CEN":[[["3-5","7-5"],"KTL","WHA"]],
+            "KTL+WHA":[[["5-5"],"TWL","CEN"]],
+        },
+        "MOK":{
+            "TWL+CEN":[["N/A","KTL","TIK"]],
+            "KTL+TIK":[["N/A","TWL","CEN"]],
+        },
+        "PRE":{
+            "TWL+TSW":[["N/A","KTL","TIK"]],
+            "KTL+WHA":[["N/A","TWL","CEN"]],
+        },
+
+        "KOT":{
+            "EAL+ADM":[[["3-4","9-2"],"KTL","WHA"],[["3-4","9-2"],"KTL","TIK"]],
+            "EAL+LOW":[[["1-1","3-2"],"KTL","WHA"],[["1-1","3-2"],"KTL","TIK"]],
+            "KTL+TIK":[[["3-1"],"EAL","ADM"],[["3-1"],"EAL","LOW"]],
+            "KTL+WHA":[[["6-5"],"EAL","ADM"],[["6-5"],"EAL","LOW"]],
+        },
+    }
   }

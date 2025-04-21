@@ -25,16 +25,21 @@ function buildETA(etaData){
     document.getElementById('right-departures').innerHTML = '';
 
     // Get ETA data and append each item to 'left-departures'
-    _direction.forEach(w=>etaData[w].forEach((item,i) => {
+    _direction.forEach(w=>{
+        try{
+        etaData[w].forEach((item,i) => {
         try{
         var div = document.createElement('div');
         div.className = 'departure-item';
-        div.innerHTML = `<div><span class="route">${_MTR_DATA.station[item.dest].tc}</span><span class="platform" style="background-color:${_MTR_DATA.route[INPUT.line].color};">${item.plat}</span></div><div><span class="delta_${_T>0?"red":"green"}">${_T.timeparse2(item.delta)}</span><span class="time" id="time_${w}_${i}">${_T.timeparse(item.time, 0)}</span></div>`;
+        div.innerHTML = `<div><span class="route">${_MTR_DATA.station[item.dest].tc}</span><span class="platform ${INPUT.line}">${item.plat}</span></div><div><span class="delta_${_T>0?"red":"green"}">${_T.timeparse2(item.delta)}</span><span class="time" id="time_${w}_${i}">${_T.timeparse(item.time, 0)}</span></div>`;
         document.getElementById(`${(w=="UP"?"left":"right")}-departures`).appendChild(div);
         }catch(e){console.log(e)}
-    }));
+    })
+    }catch(error){}
+});
 }
 
+var _runAlready = false;
 setInterval(function() {
    if(_updateETA<0)return;
     
@@ -44,9 +49,72 @@ setInterval(function() {
            el.innerText = _T.timeparse(_T.getETA(_updateETA)[w][el.id.split('_')[2]].time, 0);
        });
    });
-
-   try{
-    document.getElementById('stn-info').innerHTML = `<span>${_MTR_DATA.route[INPUT.line].tc}</span><span>  ${_MTR_DATA.station[INPUT.sta].tc}站</span>`;
-    document.getElementById('stn-info').style = `background-color:${_MTR_DATA.route[INPUT.line].color};`;
-    }catch(error){}
 }, 1000);
+
+var interval = setInterval(function() {
+if(!_runAlready){
+    FirstRun();
+    _runAlready=true;
+    clearInterval(interval);
+}
+}, 100);
+
+function return_cardoor(car_door){
+    if(!car_door)return "";
+    if(typeof car_door === "string")return `<span class="door">${car_door}</span>`;
+    return car_door.map(g=>`
+    <span class="car-door-info">
+        <span class="car">${g.split("-")[0]}</span>車
+        <span class="door">${g.split("-")[1]}</span>門
+    </span>`).join("<br>");
+}
+
+function FirstRun(){
+    try{
+        document.getElementById('stn-info').innerHTML = `<span>${_MTR_DATA.route[INPUT.line].tc}</span><span>  ${_MTR_DATA.station[INPUT.sta].tc}站</span>`;
+        document.getElementById('stn-info').classList.add(INPUT.line);
+    
+        _direction.forEach(w=>{
+            document.getElementById(((w=="UP")?"left":"right")+"-interchange").innerHTML = 
+                getInterchange(INPUT.line, INPUT.sta, w).map((item,i)=>{
+                    try{
+                        return _MTR_DATA.exp_from[item][INPUT.line+"+"+ _MTR_DATA.route_stn[INPUT.line][(w=="DOWN")?0:_MTR_DATA.route_stn[INPUT.line].length-1]].map((item2,i2)=>
+        `<div class="interchange-line-info">
+            <div class="line-badge ${item2[1]}">
+            <a href="index.html?line=${item2[1]}&sta=${item}">
+            <span class="interchange-line-name">${_MTR_DATA.station[item].tc}</span></a>
+            <small><small>往: </small> ${_MTR_DATA.station[item2[2]].tc}</small></div>
+        
+        <div style="display: flex; align-items: center;">
+            <div>
+            ${return_cardoor(item2[0])}
+            </div>
+            <div style="padding-left: 15px; text-align: end;color:#000">
+            <p>
+                <span class="eta-time">--:--</span><br>
+                <span class="eta-time">--:--</span>
+                </p>
+            </div>
+        </div>
+        </div>`
+                        ).join('')
+                    }catch(error){return "";}}
+            ).join('');
+        })
+    
+    _runAlready=true;
+    }catch(error){}
+}
+
+function getInterchange(line, stn, bound){
+    var index = _MTR_DATA.route_stn[line].findIndex(w=>w==stn);
+    var data = (bound=="UP") ?
+        _MTR_DATA.route_stn[line].slice(0,index)
+        :
+        _MTR_DATA.route_stn[line].slice(index+1);
+    data = data.filter(w=>Object.keys(_MTR_DATA.exp_from).includes(w));
+    if(bound=="UP")data.reverse();
+        //console.log(data, data.filter(w=>Object.keys(_MTR_DATA.exp_from).includes(w)), index);
+    return data;
+}
+
