@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETA Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            max-width: 769px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .container2 {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            
+        }
+
+        .panel {
+            flex: 1;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #ccc;
+            min-width: 300px;
+        }
+
+        .departures {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            border: 0;
+            margin: 0;
+        }
+
+        .interchange {
+            flex: 1;
+            background-color: #004080;
+            padding: 15px;
+            color: white;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 100px;
+        }
+
+        .departure-item {
+            padding: 15px 5px 15px 5px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .departure-item:nth-child(even) {
+            background-color: #e6f3ff;
+        }
+
+        .interchange-info {
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        .line-info {
+            background-color: #004080;
+            padding: 15px;
+            width: 80vw;
+            color: white;
+            text-align: center;
+            display: inline-block;
+            border-radius: 8px;
+        }
+
+        .route {
+            font-size: 16px;
+            font-weight: bold;
+            min-width: 60px;
+            padding-right: 5px;
+        }
+
+        .time {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            width: 75px;
+            display: inline-block;
+            text-align: end;
+        }
+
+        .platform {
+            color: #fff;
+            font-weight: bold;
+            border-radius:50%;
+            width: 10px;
+            height: 10px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            padding: 4px;
+        }
+
+
+
+        .delta_green {
+            font-size: 0.9em;
+            font-style: italic;
+            color: green;
+            width: 150px;
+            text-align: end;
+        }
+
+        .delta_red {
+            font-size: 0.9em;
+            font-style: italic;
+            padding-left: 0;
+            color: red;
+            width: 150px;
+            text-align: end;
+        }
+        
+
+        .stn-info{
+            border-radius:4px;
+            padding: 5px 15px 5px 15px;
+        }
+
+        .stn-info > span {
+            font-size: 1.3em;
+            font-weight: bold;
+            color:#fff;
+            padding:5px;
+            width:75vw;
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                width: 100%;
+                max-width: none;
+            }
+            
+            .panel {
+                min-width: 50%;
+            }
+            
+            .time {
+            max-width: 20vw;
+            width: 65px;
+            font-size:16px;
+            }
+
+            .route {
+            font-size:12px;
+            }
+        }
+
+
+        @media (hover: hover) {
+            .departure-item:hover {
+                transform: translateX(5px);
+                cursor: pointer;
+            }
+        }
+
+    </style>
+    <script src="script/data.js"></script>
+    <script src="script/utils.js"></script>
+    <script src="script/index_script.js"></script>
+</head>
+<body>
+    <div class="container2">
+        <!-- Top Panel -->
+        <div class="stn-info" id="stn-info">
+        </div>
+    </div>
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="panel" id="left-panel">
+            <div class="departures" id="left-departures"></div>
+            <div class="interchange" id="left-interchange">
+                <div class="interchange-info"></div>
+                <div class="interchange-info"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="panel" id="right-panel">
+            <div class="departures" id="right-departures"></div>
+            <div class="interchange" id="right-interchange">
+                <div class="interchange-info"></div>
+                <div class="interchange-info"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
