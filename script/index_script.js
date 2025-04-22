@@ -16,7 +16,7 @@ function main(){
     }));
 }
 main();
-setInterval(main, 30000);
+setInterval(main, 6000);
 //update new ETA
 
 function buildETA(etaData){
@@ -31,7 +31,7 @@ function buildETA(etaData){
         try{
         var div = document.createElement('div');
         div.className = 'departure-item';
-        div.innerHTML = `<div><span class="route">${_MTR_DATA.station[item.dest].tc}</span><span class="platform ${INPUT.line}">${item.plat}</span></div><div><span class="delta_${_T>0?"red":"green"}">${_T.timeparse2(item.delta)}</span><span class="time" id="time_${w}_${i}">${_T.timeparse(item.time, 0)}</span></div>`;
+        div.innerHTML = `<div><span class="route">${_MTR_DATA.station[item.dest].tc}</span><span class="platform ${INPUT.line}">${item.plat}</span></div><div><span class="delta_${(item.delta>0)?"red":"green"}">${_T.timeparse2(item.delta)}</span><span class="time" id="time_${w}_${i}">${_T.timeparse(item.time, {"small":true})}</span></div>`;
         document.getElementById(`${(w=="UP"?"left":"right")}-departures`).appendChild(div);
         }catch(e){console.log(e)}
     })
@@ -46,7 +46,7 @@ setInterval(function() {
    //loop through UP ETA, update time with id "time_UP_{item.seq}"
    _direction.forEach(w=>{
        document.querySelectorAll(`[id^='time_${w}_']`).forEach(el=>{
-           el.innerText = _T.timeparse(_T.getETA(_updateETA)[w][el.id.split('_')[2]].time, 0);
+           el.innerHTML = _T.timeparse(_T.getETA(_updateETA)[w][el.id.split('_')[2]].time, {"small":true});
        });
    });
 }, 1000);
@@ -69,6 +69,15 @@ function return_cardoor(car_door){
     </span>`).join("<br>");
 }
 
+function return_direction(info){
+    return info.map(g=>
+    ` <div style="color:#000;display: flex;align-items: center;line-height: 1.2">
+        <div style="display: ${g[1]?"inline-block":"none"}; padding-right: 10px">${g[1]?"<small>往: </small>"+_MTR_DATA.station[g[1]].tc:""}</div>
+        <div style="display: inline-block;">${return_cardoor(g[0])}</div>
+    </div>`
+    ).join("");
+}
+
 function FirstRun(){
     try{
         document.getElementById('stn-info').innerHTML = `<span>${_MTR_DATA.route[INPUT.line].tc}</span><span>  ${_MTR_DATA.station[INPUT.sta].tc}站</span>`;
@@ -80,22 +89,14 @@ function FirstRun(){
                     try{
                         return _MTR_DATA.exp_from[item][INPUT.line+"+"+ _MTR_DATA.route_stn[INPUT.line][(w=="DOWN")?0:_MTR_DATA.route_stn[INPUT.line].length-1]].map((item2,i2)=>
         `<div class="interchange-line-info">
-            <div class="line-badge ${item2[1]}">
-            <a href="index.html?line=${item2[1]}&sta=${item}">
+            <div class="line-badge ${item2[0]}">
+            <a href="index.html?line=${item2[0]}&sta=${item}">
             <span class="interchange-line-name">${_MTR_DATA.station[item].tc}</span></a>
-            <small><small>往: </small> ${_MTR_DATA.station[item2[2]].tc}</small></div>
+            <small>${_MTR_DATA.route[item2[0]].tc}</small></div>
+            <div style="width:100%; display: flex; justify-content: center; align-items: center;">
+                ${return_direction(item2[1])}
+            </div>
         
-        <div style="display: flex; align-items: center;">
-            <div>
-            ${return_cardoor(item2[0])}
-            </div>
-            <div style="padding-left: 15px; text-align: end;color:#000">
-            <p>
-                <span class="eta-time">--:--</span><br>
-                <span class="eta-time">--:--</span>
-                </p>
-            </div>
-        </div>
         </div>`
                         ).join('')
                     }catch(error){return "";}}
@@ -103,7 +104,7 @@ function FirstRun(){
         })
     
     _runAlready=true;
-    }catch(error){}
+    }catch(error){console.log(error)}
 }
 
 function getInterchange(line, stn, bound){

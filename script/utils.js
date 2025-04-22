@@ -63,26 +63,29 @@ var _T = {
      * @param {number} mode - 1 for displaying the time in 24-hour format, 0 for displaying the time difference
      * @return {string} The parsed time string
      */
-    timeparse : function(e,mode, jj){
+    timeparse : function(e,parm={}){
+        var _S={"m":"分","s":"秒"};
+        if(parm.small)_S={"m":"<small>分</small>","s":"<small>秒</small>"};
+
         if (!(e instanceof Date)) {
             e = new Date(e.replace("Z","+08:00"))
         }
 
         let diffSeconds = Math.floor((e - new Date()) / 1000);
         
-        if (mode === 1) {
+        if (parm.mode === 1) {
             return e.toTimeString().slice(0, 5);
         }
         if (diffSeconds <= 0) 
-            return `${jj?"即將抵達":""} -${Math.abs(diffSeconds)}秒`;
+            return `${parm.jj?"即將抵達":""} -${Math.abs(diffSeconds)}${_S.s}`;
         if (diffSeconds <= 90) 
-            return `${diffSeconds}秒`;
+            return `${diffSeconds}${_S.s}`;
         if (diffSeconds < 480) {
             let minutes = Math.floor(diffSeconds / 60);
             let seconds = diffSeconds % 60;
-            return `${minutes}分${seconds}秒`;
+            return `${minutes}${_S.m}${seconds}${_S.s}`;
         }
-        return `${Math.floor(diffSeconds / 60)}分`;
+        return `${Math.floor(diffSeconds / 60)}${_S.m}`;
     
     },
 

@@ -166,55 +166,109 @@ const _MTR_DATA = {
     },
 
     "exp_from":{
-        "CEN":{
-            "ISL+KET":[[["4-2"],"TWL","TSW"]],
-            "TWL+TSW":[[["1-1"],"ISL","KET"]]
-        },
-        "NOP":{
-            "ISL+KET":[[["1-3","6-4","8-4"],"TKL","POA"]],
-            "TKL+POA":[[["1-4","5-4","7-1"],"ISL","KET"]],
-        },
-        "QUB":{
-            "ISL+CHW":[[["6-4"],"TKL","POA"]],
-            "TKL+POA":[[["4-5"],"ISL","CHW"]],
-        },
+        "CEN": {
+        "ISL+KET": [
+            ["TWL", [[["4-2"]]]]
+        ],
+        "TWL+TSW": [
+            ["ISL", [[["1-1"], "KET"]]]
+        ]
+    },
+    "NOP": {
+        "ISL+KET": [
+            ["TKL", [[["1-3","6-4","8-4"]]]]
+        ],
+        "TKL+POA": [
+            ["ISL", [[["1-4","5-4","7-1"], "KET"]]]
+        ]
+    },
+    "QUB": {
+        "ISL+CHW": [
+            ["TKL", [[["6-4"], "POA"]]]
+        ],
+        "TKL+POA": [
+            ["ISL", [[["4-5"], "CHW"]]]
+        ]
+    },
+    "ADM": {
+        "ISL+KET": [
+            ["SIL", [[["5-1"]]]],
+            ["EAL", [[["3-1","5-1"]]]]
+        ],
+        "SIL+SOH": [
+            ["ISL", [[["1-4"]]]],
+            ["TWL", [[["1-4"], "TSW"]]],
+            ["EAL", [[["1-4"]]]]
+        ],
+        "TWL+TSW": [
+            ["ISL", [["N/A", "CHW"]]],
+            ["SIL", [[["4-4"]]]]
+        ],
+        "ISL+CHW": [
+            ["TWL", [["N/A", "TSW"]]],
+            ["SIL", [[["4-5"]]]],
+            ["EAL", [[["4-5","6-5"]]]]
+        ]
+    },
+    "YAT": {
+        "TKL+NOP": [
+            ["KTL", [["N/A", "WHA"]]]
+        ],
+        "KTL+WHA": [
+            ["TKL", [["N/A", "NOP"]]]
+        ]
+    },
         
-        "ADM":{
-            "ISL+KET":[[["5-1"],"SIL","SOH"], [["3-1","5-1"],"EAL","LOW"]],
-            "SIL+SOH":[[["1-4"],"ISL","KET"], [["1-4"],"ISL","CHW"],[["1-4"],"TWL","TSW"], [["1-4"],"EAL","LOW"]],
-            "TWL+TSW":[["N/A","ISL","CHW"],[["4-4"],"SIL","SOH"]],
-            "ISL+CHW":[["N/A","TWL","TSW"],[["4-5"],"SIL","SOH"],[["4-5","6-5"],"EAL","LOW"]]
-        },
-        
-        "YAT":{
-            "TKL+NOP":[["N/A","KTL","WHA"]],
-            "KTL+WHA":[["N/A","TKL","NOP"]],
-        },
-        "TIK":{
-            "TKL+POA":[["N/A","KTL","WHA"]],
-            "KTL+WHA":[["N/A","TKL","POA"]],
-        },
-        "HUH":{
+    "TIK": {
+        "TKL+POA": [
+            ["KTL", [["N/A"]]]
+        ],
+        "KTL+WHA": [
+            ["TKL", [["N/A"]]]
+        ]
+    },
+    "HUH": {
 
-        },
-        "YMT":{
-            "TWL+CEN":[[["3-5","7-5"],"KTL","WHA"]],
-            "KTL+WHA":[[["5-5"],"TWL","CEN"]],
-        },
-        "MOK":{
-            "TWL+CEN":[["N/A","KTL","TIK"]],
-            "KTL+TIK":[["N/A","TWL","CEN"]],
-        },
-        "PRE":{
-            "TWL+TSW":[["N/A","KTL","TIK"]],
-            "KTL+WHA":[["N/A","TWL","CEN"]],
-        },
 
-        "KOT":{
-            "EAL+ADM":[[["3-4","9-2"],"KTL","WHA"],[["3-4","9-2"],"KTL","TIK"]],
-            "EAL+LOW":[[["1-1","3-2"],"KTL","WHA"],[["1-1","3-2"],"KTL","TIK"]],
-            "KTL+TIK":[[["3-1"],"EAL","ADM"],[["3-1"],"EAL","LOW"]],
-            "KTL+WHA":[[["6-5"],"EAL","ADM"],[["6-5"],"EAL","LOW"]],
-        },
+    },
+    "YMT": {
+        "TWL+CEN": [
+            ["KTL", [[["3-5","7-5"], "WHA"]]]
+        ],
+        "KTL+WHA": [
+            ["TWL", [[["5-5"], "CEN"]]]
+        ]
+    },
+    "MOK": {
+        "TWL+CEN": [
+            ["KTL", [["N/A", "TIK"]]]
+        ],
+        "KTL+TIK": [
+            ["TWL", [["N/A", "CEN"]]]
+        ]
+    },
+    "PRE": {
+        "TWL+TSW": [
+            ["KTL", [["N/A", "TIK"]]]
+        ],
+        "KTL+WHA": [
+            ["TWL", [["N/A", "CEN"]]]
+        ]
+    },
+    "KOT": {
+        "EAL+ADM": [
+            ["KTL", [[["3-4","9-2"]]]]
+        ],
+        "EAL+LOW": [
+            ["KTL", [[["1-1","3-2"]]]]
+        ],
+        "KTL+TIK": [
+            ["EAL", [[["3-1"]]]]
+        ],
+        "KTL+WHA": [
+            ["EAL", [[["6-5"]]]]
+        ]
     }
-  }
+}
+
+}
