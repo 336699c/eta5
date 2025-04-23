@@ -3,282 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETA Display</title>
+    <title>MTR Train Arrival Times</title>
+    <link rel="stylesheet" href="script/index.css">
     <style>
-        .AEL { background: #1c7670;}
-        .TCL { background: #fe7f1d;}
-        .TML { background: #9a3b26;}
-        .TKL { background: #6b208b;}
-        .EAL { background: #53b7e8;}
-        .SIL { background: #b5bd00;}
-        .TWL { background: #ff0000;}
-        .ISL { background: #0860a8;}
-        .KTL { background: #1a9431;}
-        .DRL { background: #f550a6;}
-
         body {
-            margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
-            background: #fff;
-            overflow: hidden; /* Prevent body scrolling */
-            height: 100vh;
-        }
-
-        .wrapper {
-            max-width: 769px;
+            max-width: 800px;
             margin: 0 auto;
-            background: #fff;
-            min-height: 100vh;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            padding: 20px;
+            background-color: #f5f5f5;
         }
 
-        .container {
-            display: flex;
-            width: 100%;
-            min-height: 100vh;
+        .header {
+            text-align: center;
+            color: #0033cc;
+            margin-bottom: 30px;
         }
 
-        .container2 {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        .panel {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding: 0;
-            margin: 0;
-            border-right: 2px solid #ccc;
-            min-width: 300px;
-        }
-
-        .departures {
-            overflow-y: auto;
-            padding: 0;
-            border: 0;
-            margin: 0;
-        }
-
-        .interchange {
-            flex: 0.95;
-            overflow-y: scroll;
-            background: #f8f9fa;
-            padding: 5px;
-            color: white;
-            background-color:#f7f7f7;
+        button {
+            padding: 12px 20px;
+            border: none;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            font-family: 'MTR Sans', Arial, sans-serif;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
 
-        .departure-item {
-            padding: 15px 5px 15px 5px;
-            margin: 5px 0;
+        .auto-detect {
+            background-color: #0033cc;
+            color: white;
+        }
+
+        .manual-select {
+            background-color: #666666;
+            color: white;
+        }
+
+        .station-selector {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .selector-active {
+            display: block;
+        }
+
+        .line-list, .station-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .line-item, .station-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .white{
+          color:#fff;
+        }
+
+        .line-item:hover, .station-item:hover {
+            background-color: #0033cc;
+            color: white;
+        }
+
+        .eta-results {
+            margin-top: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .eta-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
         }
-
-        .departure-item:nth-child(even) {
-            background-color: #e6f3ff;
-        }
-
-        .interchange-info {
-            display: grid;
-            align-items: center;
-            padding: 8px;
-            background: white;
-            border-radius: 7px;
-            transition: transform 0.2s;
-            color:#000;
-        }
-
-        .line-info {
-            background-color: #004080;
-            padding: 15px;
-            width: 80vw;
-            color: white;
-            text-align: center;
-            display: inline-block;
-            border-radius: 8px;
-        }
-
-        .route {
-            font-size: 14px;
-            font-weight: bold;
-            min-width: 60px;
-            padding-right: 5px;
-        }
-
-        .time {
-            font-size: 17px;
-            color: #333;
-            font-weight: bold;
-            width: 75px;
-            display: inline-block;
-            text-align: end;
-        }
-
-        .platform {
-            color: #fff;
-            font-weight: bold;
-            border-radius:50%;
-            width: 10px;
-            height: 10px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 10px;
-            padding: 4px;
-        }
-
-        .tab{
-            padding-right:15px;
-            padding-left:5px;
-        }
-
-        .delta_green {
-            font-size: 11px;
-            font-style: italic;
-            color: green;
-            width: 150px;
-            text-align: end;
-        }
-
-        .delta_red {
-            font-size: 11px;
-            font-style: italic;
-            padding-left: 0;
-            color: red;
-            width: 150px;
-            text-align: end;
-        }
-        
-
-        .stn-info{
-            border-radius:4px;
-            padding: 5px 15px 5px 15px;
-        }
-
-        .stn-info > span {
-            font-size: 1.3em;
-            font-weight: bold;
-            color:#fff;
-            padding:5px;
-            width:75vw;
-        }
-
-
-        span.interchange-line-name{
-            display:inline-block;
-            padding-right:15px;
-            padding-left:5px;
-            width:60px;
-            color:#fff;
-            font-weight: bold;
-        }
-
-
-        .interchange-line-info{
-            background-color:#eee;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 15px;
-        }
-
-        .line-badge{
-            padding: 8px;
-            color: #fff;
-            border-radius: 8px 8px 0 0;
-            margin-left:0px;
-            margin-bottom: 7px;
-        }
-
-        span.car{
-            font-size: 25px;
-            font-weight: bold;
-            color:#000;
-            padding: 0 3px 0 3px;
-        }
-        span.door{
-            font-size: 21px;
-            font-weight: bold;
-            color:#000;
-            padding: 0 3px 0 3px;
-        }
-
-        span.car-door-info{
-            padding: 3px;
-            font-size: 11px;
-            color:#777;
-        }
-
-        @media (max-width: 768px) {
-            .wrapper {
-                width: 100%;
-                max-width: none;
-            }
-            
-            .panel {
-                min-width: 50%;
-            }
-            
-            .time {
-            max-width: 20vw;
-            width: 65px;
-            font-size:17px;
-            }
-
-            .route {
-            font-size:14px;
-            }
-        }
-
-
-        @media (hover: hover) {
-            .departure-item:hover {
-                transform: translateX(5px);
-                cursor: pointer;
-            }
-        }
-
     </style>
-    <script src="script/data.js"></script>
-    <script src="script/utils.js"></script>
-    <script src="script/index_script.js"></script>
 </head>
 <body>
-    <div class="container2">
-        <!-- Top Panel -->
-        <div class="stn-info" id="stn-info">
-        </div>
-    </div>
-    <div class="container">
-        <!-- Left Panel -->
-        <div class="panel" id="left-panel">
-            <div class="departures" id="left-departures"></div>
-            <div class="interchange" id="left-interchange">
-                <div class="interchange-info"></div>
-                <div class="interchange-info"></div>
-            </div>
-        </div>
-
-        <!-- Right Panel -->
-        <div class="panel" id="right-panel">
-            <div class="departures" id="right-departures"></div>
-            <div class="interchange" id="right-interchange">
-                <div class="interchange-info"></div>
-                <div class="interchange-info"></div>
-            </div>
-        </div>
+    <div class="header">
+        <h1>MTR Train Arrival Times</h1>
+        <p>Check real-time train schedules for Hong Kong MTR</p>
     </div>
 
+    <div class="control-panel">
+        <button class="auto-detect" onclick="getLocation()">
+            <span class="material-icons">📍</span> Auto Detect
+        </button>
+        <!--
+        <button class="manual-select" onclick="showLineSelector()">
+            <span class="material-icons">📋</span> Select Line
+        </button>
+      -->
+    </div>
+
+    
+    <div id="lineSelector" class="station-selector">
+        <h3>Select MTR Line</h3>
+        <div class="line-list" id="lineList"></div>
+    </div>
+
+    
+    <div id="stationSelector" class="station-selector">
+        <h3>Select Station</h3>
+        <div class="station-list" id="stationList"></div>
+    </div>
+    <script src="script/data.js"></script>
+    <script src="script/geo_script.js"></script>
+    <script>
+var _LINE = null;
+var _STA = null;
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        let nearestStation = getNearestStation(position.coords.latitude, position.coords.longitude);
+        console.log(nearestStation);
+        window.location.href = `index2.html?line=${_MTR_DATA.station[nearestStation].line[0]}&sta=${nearestStation}`;
+      },
+      error => {
+        alert(`Error: ${error.message}`);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000
+      }
+    );
+  } else {
+    alert("Geolocation unavailable");
+  }
+}
+
+function showLineSelector() {
+    document.getElementById('lineSelector').classList.add('selector-active');
+    const lineList = document.getElementById('lineList');
+    lineList.innerHTML = Object.keys(_MTR_DATA.route).map(line => `
+        <div class="line-item ${line} white" onclick="selectLine('${line}')">${_MTR_DATA.route[line].tc}<br><small><small>${_MTR_DATA.route[line].en}</small></small></div>
+    `).join('');
+}
+showLineSelector();
+
+function selectLine(line) {
+  _LINE = line;
+  console.log(_LINE);
+  populateStations(line);
+}
+
+function populateStations(line2) {
+    const stationList = document.getElementById('stationList');
+    document.getElementById('stationSelector').classList.add('selector-active');
+    stationList.innerHTML = _MTR_DATA.route_stn[line2].map((g) => `
+        <div class="station-item" onclick="window.location.href = 'index2.html?line=${line2}&sta=${g}'">
+            ${_MTR_DATA.station[g].tc}<br><small>${_MTR_DATA.station[g].en}</small>
+        </div>
+    `).join('');
+}
+    </script>
 </body>
 </html>
-
-
-

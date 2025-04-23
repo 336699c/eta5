@@ -60,6 +60,7 @@ if(!_runAlready){
 }, 100);
 
 function return_cardoor(car_door){
+    if(car_door == "")return `<span>/</span>`;
     if(!car_door)return "";
     if(typeof car_door === "string")return `<span class="door">${car_door}</span>`;
     return car_door.map(g=>`
@@ -71,11 +72,21 @@ function return_cardoor(car_door){
 
 function return_direction(info){
     return info.map(g=>
-    ` <div style="color:#000;display: flex;align-items: center;line-height: 1.2">
+    ` <div style="color:#000;display: flex; flex-direction: row;align-items: center;justify-content: center;">
         <div style="display: ${g[1]?"inline-block":"none"}; padding-right: 10px">${g[1]?"<small>往: </small>"+_MTR_DATA.station[g[1]].tc:""}</div>
         <div style="display: inline-block;">${return_cardoor(g[0])}</div>
     </div>`
     ).join("");
+}
+
+function handle_stnname(sta, line){
+    if(line=="TCL" && sta=="CEN")return "HOK";
+    if(line=="ISL" && sta=="HOK")return "CEN";
+    if(line=="TWL" && sta=="HOK")return "CEN";
+    if(line=="TWL" && sta=="ETS")return "TST";
+    if(line=="TML" && sta=="TST")return "ETS";
+
+    return sta;
 }
 
 function FirstRun(){
@@ -90,10 +101,10 @@ function FirstRun(){
                         return _MTR_DATA.exp_from[item][INPUT.line+"+"+ _MTR_DATA.route_stn[INPUT.line][(w=="DOWN")?0:_MTR_DATA.route_stn[INPUT.line].length-1]].map((item2,i2)=>
         `<div class="interchange-line-info">
             <div class="line-badge ${item2[0]}">
-            <a href="index.html?line=${item2[0]}&sta=${item}">
+            <a href="index2.html?line=${item2[0]}&sta=${handle_stnname(item, item2[0])}">
             <span class="interchange-line-name">${_MTR_DATA.station[item].tc}</span></a>
             <small>${_MTR_DATA.route[item2[0]].tc}</small></div>
-            <div style="width:100%; display: flex; justify-content: center; align-items: center;">
+            <div style="width:100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 ${return_direction(item2[1])}
             </div>
         

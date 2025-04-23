@@ -22,14 +22,14 @@ var _T = {
                     const originalTime = new Date(originalItem.time.replace("Z","+08:00"));
                     const originalTime2 = (originalETA[originalIndex+1] ? new Date(originalETA[originalIndex+1].time.replace("Z","+08:00")) : NaN);
                     const newTime = new Date(newItem.time.replace("Z","+08:00"));
-                    const timeDifference = (newTime - originalTime) / (1000 * 60); // time difference in minutes
+                    const timeDifference = Math.abs(newTime - originalTime) / (1000 * 60); // time difference in minutes
 
                     if (timeDifference > 5 || (originalTime2 && Math.abs(originalTime2 - newTime) < Math.abs(originalTime - newTime))) {
                         originalIndex++;
                         continue;
                     }
 
-                    newItem.delta = originalItem.delta + (originalTime - newTime) / 1000;
+                    newItem.delta = originalItem.delta + (newTime - originalTime) / 1000;
                     originalIndex++;
                     newIndex++;
                 }
