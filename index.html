@@ -107,11 +107,13 @@
         <p>Check real-time train schedules for Hong Kong MTR</p>
     </div>
 
-    <div class="control-panel">
+    <div class="control-panel" id="control-panel">
+      <!--
         <button class="auto-detect" onclick="getLocation()">
             <span class="material-icons">📍</span> Auto Detect
         </button>
-        <!--
+
+        
         <button class="manual-select" onclick="showLineSelector()">
             <span class="material-icons">📋</span> Select Line
         </button>
@@ -134,13 +136,11 @@
     <script>
 var _LINE = null;
 var _STA = null;
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
+function getLocation(callback) {
+  if (navigator.geolocation)navigator.geolocation.getCurrentPosition(
       position => {
-        let nearestStation = getNearestStation(position.coords.latitude, position.coords.longitude);
-        console.log(nearestStation);
-        window.location.href = `index2.html?line=${_MTR_DATA.station[nearestStation].line[0]}&sta=${nearestStation}`;
+        callback(position);
+        
       },
       error => {
         alert(`Error: ${error.message}`);
@@ -150,10 +150,21 @@ function getLocation() {
         timeout: 5000
       }
     );
-  } else {
-    alert("Geolocation unavailable");
-  }
 }
+
+getLocation(((position)=>{
+  let nearestStation = getNearestStation(position.coords.latitude, position.coords.longitude);
+  console.log(nearestStation);
+
+  const controlPanel = document.getElementById('control-panel');
+  const newButton = document.createElement('button');
+  newButton.classList.add('station-item');
+  newButton.innerHTML = `GPS Location: <br>${_MTR_DATA.station[nearestStation].tc}<br>${_MTR_DATA.station[nearestStation].en}`;
+  newButton.onclick = () => {
+    window.location.href = `index2.html?line=${_MTR_DATA.station[nearestStation].line[0]}&sta=${nearestStation}`;
+  };
+  controlPanel.appendChild(newButton);
+}));
 
 function showLineSelector() {
     document.getElementById('lineSelector').classList.add('selector-active');
