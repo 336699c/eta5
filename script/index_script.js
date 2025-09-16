@@ -10,6 +10,7 @@ function parseInput(){
 }
 
 function main(){
+    if(document.visibilityState=="visible")
     _T.MTR_ETA(INPUT.line, INPUT.sta,((s,d)=>{
         _updateETA=d;
         buildETA(s);

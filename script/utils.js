@@ -1,10 +1,33 @@
-var _T = {
-    ETA: [],
-    ETAID:0,
+//Version: 20250424
 
+/**
+ * @namespace _T
+ * @description Utility functions for parsing and processing ETA data
+ */
+var _T = {
+    /**
+     * @property {array} ETA - Array of ETA data objects
+     */
+    ETA: [],
+    /**
+     * @property {number} ETAID - Auto-incrementing ID for each ETA data object
+     */
+    ETAID: 0,
+
+    /**
+     * @function getETA
+     * @description Get an ETA data object by its ID
+     * @param {number} id - The ID of the ETA data object
+     * @return {object} The ETA data object
+     */
     getETA: function(id){
         return this.ETA.find(w=>w.ID==id);
     },
+    /**
+     * @function pushETA
+     * @description Push a new ETA data object to the array
+     * @param {object} data - The new ETA data object
+     */
     pushETA: function(data){
         var original = this.ETA.find(w=>w.parm==data.parm);
         if(original){
@@ -60,7 +83,11 @@ var _T = {
      * @function timeparse
      * @description Parse the ETA time string into a human-readable format
      * @param {string|Date} e - The time string to be parsed
-     * @param {number} mode - 1 for displaying the time in 24-hour format, 0 for displaying the time difference
+     * @param {object} parm - Object containing parameters for the parsing
+     * mode 0 for default, mode 1 for 24-hour time
+     * jj for "即將抵達"
+     * small for small font
+     * @default {mode:0,jj:false,small:false}
      * @return {string} The parsed time string
      */
     timeparse : function(e,parm={}){
@@ -108,6 +135,13 @@ var _T = {
         this.ETA = this.ETA.filter(w=>w.timestamp>=(Date.now()-60000));
     },
 
+    /**
+     * @function MTR_ETA
+     * @description Fetch the ETA data from API asynchronously 
+     * @param {string} line - The line code of the MTR line
+     * @param {string} sta - The station code of the MTR station
+     * @param {function} callback - The callback function to process the response
+     */
     MTR_ETA: function(line, sta, callback){
         this.fetchETA(`https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line=${line}&sta=${sta}`, function(data){
             var s = {

@@ -263,6 +263,12 @@ const _MTR_DATA = {
         "TWL+CEN": [
             ["KTL", [["", "TIK"]]]
         ],
+        "TWL+TSW": [
+            ["KTL", [["", "WHA"]]]
+        ],
+        "KTL+WHA": [
+            ["TWL", [["", "TSW"]]]
+        ],
         "KTL+TIK": [
             ["TWL", [["", "CEN"]]]
         ]
@@ -270,6 +276,12 @@ const _MTR_DATA = {
     "PRE": {
         "TWL+TSW": [
             ["KTL", [["", "TIK"]]]
+        ],
+        "TWL+CEN": [
+            ["KTL", [["", "WHA"]]]
+        ],
+        "KTL+TIK": [
+            ["TWL", [["", "TSW"]]]
         ],
         "KTL+WHA": [
             ["TWL", [["", "CEN"]]]
@@ -407,6 +419,15 @@ const _MTR_DATA = {
         "TCL+TUC": [
             ["ISL", [[["4-4"]]]],["TWL", [[["4-4"]]]]
         ]
+    },
+
+    "SHS": {
+        "EAL+ADM": [
+            ["EAL", [[["3-5"]]]]
+        ],
+        "EAL+LOW": [
+            ["EAL", [[["5-5"]]]]
+        ],
     },
 }
 
