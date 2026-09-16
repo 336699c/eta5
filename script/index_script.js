@@ -60,15 +60,44 @@ if(!_runAlready){
 }
 }, 100);
 
+/*
+svg symbol
+* 1 Esculator
+# 2 Stairs
+^ 3 Lift
+*/
+const svgs = {
+    3: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+  <path d="M8 10l3-3 3 3"/>
+  <path d="M8 14l3 3 3-3"/>
+</svg>`,
+    1: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 18h4l7-10h5"/>
+  <circle cx="6" cy="11" r="1.5"/>
+  <path d="M6 12.5V15"/>
+  <circle cx="17" cy="4" r="1.5"/>
+  <path d="M17 5.5V8"/>
+</svg>`,
+    2: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 19h4v-4h4v-4h4V7h4"/>
+</svg>`
+}
+
 function return_cardoor(car_door){
     if(car_door == "")return `<span>/</span>`;
     if(!car_door)return "";
     if(typeof car_door === "string")return `<span class="door">${car_door}</span>`;
-    return car_door.map(g=>`
+    return car_door.map(g=>{
+        let type2 = (g[0]=="*" ? 1 : (g[0]=="#" ? 2 : 0 ) );
+        let string2 = (type2 ? g.substring(1) : g);
+        
+        return `
     <span class="car-door-info">
-        <span class="car">${g.split("-")[0]}</span>車
-        <span class="door">${g.split("-")[1]}</span>門
-    </span>`).join("<br>");
+        <span class="car">${string2.split("-")[0]}</span>車
+        <span class="door">${string2.split("-")[1]}</span>門
+        ${type2? svgs[type2] : ""}
+    </span>`}).join("<br>");
 }
 
 function return_direction(info){
