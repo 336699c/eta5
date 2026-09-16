@@ -32,7 +32,9 @@ function buildETA(etaData){
         try{
         var div = document.createElement('div');
         div.className = 'departure-item';
-        div.innerHTML = `<div><span class="route">${_MTR_DATA.station[item.dest].tc}</span><span class="platform ${INPUT.line}">${item.plat}</span></div><div><span class="delta_${(item.delta>0)?"red":"green"}">${_T.timeparse2(item.delta)}</span><span class="time" id="time_${w}_${i}">${_T.timeparse(item.time, {"small":true})}</span></div>`;
+        div.innerHTML = `<div><span class="route">${_MTR_DATA.station[item.dest].tc}</span><span class="platform ${INPUT.line}">${item.plat}</span></div><div>
+        <span class="time" id="time_${w}_${i}">${((item.time)=>{let x = Math.round((new Date(e) - Date.now())/60000); return (x>1) ? x+" 分鐘" : "即將抵達"})()}</span>
+                                                  </div>`;
         document.getElementById(`${(w=="UP"?"left":"right")}-departures`).appendChild(div);
         }catch(e){console.log(e)}
     })
