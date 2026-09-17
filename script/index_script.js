@@ -50,7 +50,8 @@ setInterval(function() {
    //loop through UP ETA, update time with id "time_UP_{item.seq}"
    _direction.forEach(w=>{
        document.querySelectorAll(`[id^='time_${w}_']`).forEach(el=>{
-           el.innerHTML = _T.timeparse(_T.getETA(_updateETA)[w][el.id.split('_')[2]].time, {"small":true});
+           el.innerHTML = ((e)=>{let x = Math.round((new Date(e) - Date.now())/60000); return (x>1) ? x+" 分鐘" : "即將抵達"})(_T.getETA(_updateETA)[w][el.id.split('_')[2]].time)
+           //el.innerHTML = _T.timeparse(, {"small":true});
        });
    });
 }, 1000);
